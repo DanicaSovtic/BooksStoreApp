@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BookAPI.API.Data;
 using BookAPI.API.Models.Author;
+using BookStoreApp.API.Data;
 using BookStoreApp.API.Models.Author;
 using BookStoreApp.API.Models.Book;
+using BookStoreApp.API.Models.User;
 
 namespace BookAPI.API.Configurations
 {
@@ -25,7 +27,7 @@ namespace BookAPI.API.Configurations
             CreateMap<BookCreateDto, Book>().ReverseMap();
             CreateMap<BookUpdateDto, Book>().ReverseMap();
 
-
+            CreateMap<ApiUser, UserDto>().ReverseMap();
 
 
         }
