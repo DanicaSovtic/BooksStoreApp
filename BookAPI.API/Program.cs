@@ -1,24 +1,23 @@
-using System.Text;
 using BookAPI.API.Configurations;
 using BookAPI.API.Data;
 using BookStoreApp.API.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 var connString = builder.Configuration.GetConnectionString("BookStoreAppDbConnection");
 builder.Services.AddDbContext<BookStoreDbContext>(options => options.UseSqlServer(connString));
 
 builder.Services.AddIdentityCore<ApiUser>()
-     .AddRoles<IdentityRole>()
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<BookStoreDbContext>();
-
 
 builder.Services.AddAutoMapper(typeof(MapperConfing));
 
@@ -26,7 +25,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 builder.Host.UseSerilog((ctx, lc) =>
     lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
@@ -39,7 +37,6 @@ builder.Services.AddCors(options => {
 });
 
 builder.Services.AddAuthentication(options => {
-   
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options => {
@@ -56,7 +53,6 @@ builder.Services.AddAuthentication(options => {
     };
 });
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -71,7 +67,6 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapControllers();
