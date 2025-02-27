@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using BookAPI.API.Data;
-using BookAPI.API.Models.Author;
-using AutoMapper;
 using BookStoreApp.API.Models.Author;
-using BookAPI.API.Static;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper.QueryableExtensions;
+using BookAPI.API.Data;
+using BookAPI.API.Static;
+using BookAPI.API.Models.Author;
 
 namespace BookStoreApp.API.Controllers
 {
@@ -19,16 +15,15 @@ namespace BookStoreApp.API.Controllers
     [Authorize]
     public class AuthorsController : ControllerBase
     {
-      
-        private readonly ILogger<AuthorsController> logger;
-        private readonly IMapper mapper;
         private readonly BookStoreDbContext _context;
+        private readonly IMapper mapper;
+        private readonly ILogger<AuthorsController> logger;
 
-        public AuthorsController(BookStoreDbContext context, IMapper mapper, ILogger<AuthorsController>logger)
+        public AuthorsController(BookStoreDbContext context, IMapper mapper, ILogger<AuthorsController> logger)
         {
             _context = context;
             this.mapper = mapper;
-           
+            this.logger = logger;
         }
 
         // GET: api/Authors
@@ -50,11 +45,14 @@ namespace BookStoreApp.API.Controllers
 
         // GET: api/Authors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<AuthorReadOnlyDto>> GetAuthor(int id)
+        public async Task<ActionResult<AuthorDetailsDto>> GetAuthor(int id)
         {
             try
             {
-                var author = await _context.Authors.FindAsync(id);
+                var author = await _context.Authors
+                    .Include(q => q.Books)
+                    .ProjectTo<AuthorDetailsDto>(mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(q => q.Id == id);
 
                 if (author == null)
                 {
@@ -62,8 +60,7 @@ namespace BookStoreApp.API.Controllers
                     return NotFound();
                 }
 
-                var authorDto = mapper.Map<AuthorReadOnlyDto>(author);
-                return Ok(authorDto);
+                return Ok(author);
             }
             catch (Exception ex)
             {

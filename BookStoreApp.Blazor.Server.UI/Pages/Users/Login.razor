@@ -1,8 +1,8 @@
 ﻿@page "/users/login"
-@inject NavigationManager navManager
 @inject IAuthenticationService authService
-<h3>Login</h3>
+@inject NavigationManager navManager
 
+<h3>Login</h3>
 
 <div>
     <EditForm Model="LoginModel" OnValidSubmit="HandleLogin">
@@ -24,9 +24,6 @@
     </EditForm>
 
 </div>
-
-
-
 
 @code {
     LoginUserDto LoginModel = new LoginUserDto();

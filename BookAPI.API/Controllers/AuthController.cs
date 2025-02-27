@@ -50,7 +50,7 @@ namespace BookStoreApp.API.Controllers
                     {
                         ModelState.AddModelError(error.Code, error.Description);
                     }
-                    return BadRequest(ModelState); 
+                    return BadRequest(ModelState);
                 }
 
                 await userManager.AddToRoleAsync(user, "User");

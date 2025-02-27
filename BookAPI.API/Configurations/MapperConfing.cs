@@ -14,6 +14,8 @@ namespace BookAPI.API.Configurations
         public MapperConfing()
         {
             CreateMap<AuthorCreateDto,Author>().ReverseMap();
+            CreateMap<AuthorDetailsDto, Author>().ReverseMap();
+
             CreateMap<AuthorUpdateDto, Author>().ReverseMap();
             CreateMap<AuthorReadOnlyDto, Author>().ReverseMap();
             CreateMap<Book, BookReadOnlyDto>()
