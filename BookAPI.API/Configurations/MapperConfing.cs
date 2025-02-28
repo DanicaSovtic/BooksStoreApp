@@ -6,6 +6,7 @@ using BookStoreApp.API.Models.Author;
 using BookStoreApp.API.Models.Book;
 using BookStoreApp.API.Models.User;
 
+
 namespace BookAPI.API.Configurations
 {
     public class MapperConfing:Profile
@@ -19,7 +20,7 @@ namespace BookAPI.API.Configurations
             CreateMap<AuthorUpdateDto, Author>().ReverseMap();
             CreateMap<AuthorReadOnlyDto, Author>().ReverseMap();
             CreateMap<Book, BookReadOnlyDto>()
-                .ForMember(q=>q.AuthorName,d=>d.MapFrom(map=>$"{map.Author.FirstName}{map.Author.LastName}"))
+                .ForMember(q =>q.AuthorName,d=>d.MapFrom(map=>$"{map.Author.FirstName}{map.Author.LastName}"))
                 .ReverseMap();
 
             CreateMap<Book, BookDetailsDto>()

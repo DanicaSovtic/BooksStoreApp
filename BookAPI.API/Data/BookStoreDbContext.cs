@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using BookStoreApp.API.Data;
+﻿using BookAPI.API.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace BookAPI.API.Data
+
+namespace BookStoreApp.API.Data
 {
     public partial class BookStoreDbContext : IdentityDbContext<ApiUser>
     {
@@ -21,10 +19,6 @@ namespace BookAPI.API.Data
 
         public virtual DbSet<Author> Authors { get; set; } = null!;
         public virtual DbSet<Book> Books { get; set; } = null!;
-
-      
-
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,10 +35,10 @@ namespace BookAPI.API.Data
 
             modelBuilder.Entity<Book>(entity =>
             {
-                entity.HasIndex(e => e.Isbn, "UQ__Books__447D36EA15FA2697")
+                entity.HasIndex(e => e.Isbn, "UQ__Books__447D36EA09FAB742")
                     .IsUnique();
 
-                entity.Property(e => e.Image).HasMaxLength(50);
+                entity.Property(e => e.Image).HasMaxLength(250);
 
                 entity.Property(e => e.Isbn)
                     .HasMaxLength(50)
@@ -63,19 +57,19 @@ namespace BookAPI.API.Data
             });
 
             modelBuilder.Entity<IdentityRole>().HasData(
-              new IdentityRole
-              {
-                  Name = "User",
-                  NormalizedName = "USER",
-                  Id = "8343074e-8623-4e1a-b0c1-84fb8678c8f3"
-              },
-              new IdentityRole
-              {
-                  Name = "Administrator",
-                  NormalizedName = "ADMINISTRATOR",
-                  Id = "c7ac6cfe-1f10-4baf-b604-cde350db9554"
-              }
-          );
+                new IdentityRole
+                {
+                    Name = "User",
+                    NormalizedName = "USER",
+                    Id = "8343074e-8623-4e1a-b0c1-84fb8678c8f3"
+                },
+                new IdentityRole
+                {
+                    Name = "Administrator",
+                    NormalizedName = "ADMINISTRATOR",
+                    Id = "c7ac6cfe-1f10-4baf-b604-cde350db9554"
+                }
+            );
 
             var hasher = new PasswordHasher<ApiUser>();
 
@@ -103,18 +97,20 @@ namespace BookAPI.API.Data
                     PasswordHash = hasher.HashPassword(null, "P@ssword1")
                 }
             );
+
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(
-               new IdentityUserRole<string>
-               {
-                   RoleId = "8343074e-8623-4e1a-b0c1-84fb8678c8f3",
-                   UserId = "30a24107-d279-4e37-96fd-01af5b38cb27"
-               },
-               new IdentityUserRole<string>
-               {
-                   RoleId = "c7ac6cfe-1f10-4baf-b604-cde350db9554",
-                   UserId = "8e448afa-f008-446e-a52f-13c449803c2e"
-               }
-           );
+                new IdentityUserRole<string>
+                {
+                    RoleId = "8343074e-8623-4e1a-b0c1-84fb8678c8f3",
+                    UserId = "30a24107-d279-4e37-96fd-01af5b38cb27"
+                },
+                new IdentityUserRole<string>
+                {
+                    RoleId = "c7ac6cfe-1f10-4baf-b604-cde350db9554",
+                    UserId = "8e448afa-f008-446e-a52f-13c449803c2e"
+                }
+            );
+
             OnModelCreatingPartial(modelBuilder);
         }
 
